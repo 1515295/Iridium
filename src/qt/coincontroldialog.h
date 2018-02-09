@@ -1,9 +1,9 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2017 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_QT_COINCONTROLDIALOG_H
-#define BITCOIN_QT_COINCONTROLDIALOG_H
+#ifndef IRIDIUM_QT_COINCONTROLDIALOG_H
+#define IRIDIUM_QT_COINCONTROLDIALOG_H
 
 #include <amount.h>
 
@@ -52,7 +52,7 @@ public:
     static void updateLabels(WalletModel*, QDialog*);
 
     static QList<CAmount> payAmounts;
-    static CCoinControl *coinControl;
+    static CCoinControl *coinControl();
     static bool fSubtractFeeFromAmount;
 
 private:
@@ -109,4 +109,4 @@ private Q_SLOTS:
     void updateLabelLocked();
 };
 
-#endif // BITCOIN_QT_COINCONTROLDIALOG_H
+#endif // IRIDIUM_QT_COINCONTROLDIALOG_H

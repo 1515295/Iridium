@@ -1,0 +1,8 @@
+/usr/bin/iridium-cli		--	gen_context(system_u:object_r:iridium_exec_t,s0)
+/usr/sbin/iridiumd		--	gen_context(system_u:object_r:iridium_exec_t,s0)
+/usr/lib(64)?/iridium/iridiumd		--	gen_context(system_u:object_r:iridium_exec_t,s0)
+
+/etc/iridium(/.*)?		gen_context(system_u:object_r:iridium_conf_t,s0)
+/var/lib/iridium(/.*)?		gen_context(system_u:object_r:iridium_var_lib_t,s0)
+
+(/var)?/run/iridiumd(/.*)?   gen_context(system_u:object_r:iridium_var_run_t,s0)

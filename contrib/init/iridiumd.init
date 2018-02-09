@@ -1,0 +1,67 @@
+#!/bin/bash
+#
+#  iridiumd The iridium core server.
+#
+#
+# chkconfig: 345 80 20
+# description: iridiumd
+# processname: iridiumd
+#
+
+# Source function library.
+. /etc/init.d/functions
+
+# you can override defaults in /etc/sysconfig/iridiumd, see below
+if [ -f /etc/sysconfig/iridiumd ]; then
+        . /etc/sysconfig/iridiumd
+fi
+
+RETVAL=0
+
+prog=iridiumd
+# you can override the lockfile via IRIDIUMD_LOCKFILE in /etc/sysconfig/iridiumd
+lockfile=${IRIDIUMD_LOCKFILE-/var/lock/subsys/iridiumd}
+
+# iridiumd defaults to /usr/bin/iridiumd, override with IRIDIUMD_BIN
+iridiumd=${IRIDIUMD_BIN-/usr/bin/iridiumd}
+
+# iridiumd opts default to -disablewallet, override with IRIDIUMD_OPTS
+iridiumd_opts=${IRIDIUMD_OPTS--disablewallet}
+
+start() {
+    echo -n $"Starting $prog: "
+    daemon $DAEMONOPTS $iridiumd $iridiumd_opts
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && touch $lockfile
+    return $RETVAL
+}
+
+stop() {
+    echo -n $"Stopping $prog: "
+    killproc $prog
+    RETVAL=$?
+    echo
+    [ $RETVAL -eq 0 ] && rm -f $lockfile
+    return $RETVAL
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status $prog
+        ;;
+    restart)
+        stop
+        start
+        ;;
+    *)
+        echo "Usage: service $prog {start|stop|status|restart}"
+        exit 1
+        ;;
+esac

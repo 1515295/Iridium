@@ -1,0 +1,33 @@
+# /etc/conf.d/iridiumd: config file for /etc/init.d/iridiumd
+
+# Config file location
+#IRIDIUMD_CONFIGFILE="/etc/iridium/iridium.conf"
+
+# What directory to write pidfile to?  (created and owned by $IRIDIUMD_USER)
+#IRIDIUMD_PIDDIR="/var/run/iridiumd"
+
+# What filename to give the pidfile
+#IRIDIUMD_PIDFILE="${IRIDIUMD_PIDDIR}/iridiumd.pid"
+
+# Where to write iridiumd data (be mindful that the blockchain is large)
+#IRIDIUMD_DATADIR="/var/lib/iridiumd"
+
+# User and group to own iridiumd process
+#IRIDIUMD_USER="iridium"
+#IRIDIUMD_GROUP="iridium"
+
+# Path to iridiumd executable
+#IRIDIUMD_BIN="/usr/bin/iridiumd"
+
+# Nice value to run iridiumd under
+#IRIDIUMD_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#IRIDIUMD_OPTS=""
+
+# The timeout in seconds OpenRC will wait for iridiumd to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+IRIDIUMD_SIGTERM_TIMEOUT=60

@@ -1,5 +1,5 @@
 // Copyright (c) 2010 Satoshi Nakamoto
-// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2009-2017 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -12,11 +12,10 @@
 #include <utiltime.h>
 #include <version.h>
 
-#include <stdint.h>
 #include <fstream>
 
 /**
- * JSON-RPC protocol.  Bitcoin speaks version 1.0 for maximum compatibility,
+ * JSON-RPC protocol.  Iridium speaks version 1.0 for maximum compatibility,
  * but uses JSON-RPC 1.1/2.0 standards for parts of the 1.0 standard that were
  * unspecified (HTTP errors and contents of 'error').
  *
@@ -73,9 +72,7 @@ static fs::path GetAuthCookieFile(bool temp=false)
     if (temp) {
         arg += ".tmp";
     }
-    fs::path path(arg);
-    if (!path.is_complete()) path = GetDataDir() / path;
-    return path;
+    return AbsPathForConfigVal(fs::path(arg));
 }
 
 bool GenerateAuthCookie(std::string *cookie_out)

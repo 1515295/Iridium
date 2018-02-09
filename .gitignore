@@ -1,13 +1,13 @@
 *.tar.gz
 
 *.exe
-src/bitcoin
-src/bitcoind
-src/bitcoin-cli
-src/bitcoin-tx
-src/test/test_bitcoin
-src/test/test_bitcoin_fuzzy
-src/qt/test/test_bitcoin-qt
+src/iridium
+src/iridiumd
+src/iridium-cli
+src/iridium-tx
+src/test/test_iridium
+src/test/test_iridium_fuzzy
+src/qt/test/test_iridium-qt
 
 # autoreconf
 Makefile.in
@@ -30,8 +30,8 @@ config.log
 config.status
 configure
 libtool
-src/config/bitcoin-config.h
-src/config/bitcoin-config.h.in
+src/config/iridium-config.h
+src/config/iridium-config.h.in
 src/config/stamp-h1
 share/setup.nsi
 share/qt/Info.plist
@@ -43,6 +43,12 @@ src/qt/moc_*.cpp
 src/qt/forms/ui_*.h
 
 src/qt/test/moc*.cpp
+
+src/qt/iridium-qt.config
+src/qt/iridium-qt.creator
+src/qt/iridium-qt.creator.user
+src/qt/iridium-qt.files
+src/qt/iridium-qt.includes
 
 .deps
 .dirstamp
@@ -74,13 +80,13 @@ src/qt/test/moc*.cpp
 # Compilation and Qt preprocessor part
 *.qm
 Makefile
-bitcoin-qt
-Bitcoin-Qt.app
+iridium-qt
+Iridium-Qt.app
 background.tiff*
 
 # Unit-tests
 Makefile.test
-bitcoin-qt_test
+iridium-qt_test
 
 # Resources cpp
 qrc_*.cpp
@@ -93,7 +99,7 @@ build
 *.gcno
 *.gcda
 /*.info
-test_bitcoin.coverage/
+test_iridium.coverage/
 total.coverage/
 coverage_percent.txt
 
@@ -108,5 +114,5 @@ test/cache/*
 
 /doc/doxygen/
 
-libbitcoinconsensus.pc
+libiridiumconsensus.pc
 contrib/devtools/split-debug.sh

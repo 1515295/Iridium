@@ -1,12 +1,12 @@
-// Copyright (c) 2009-2016 The Bitcoin Core developers
+// Copyright (c) 2009-2017 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_NETBASE_H
-#define BITCOIN_NETBASE_H
+#ifndef IRIDIUM_NETBASE_H
+#define IRIDIUM_NETBASE_H
 
 #if defined(HAVE_CONFIG_H)
-#include <config/bitcoin-config.h>
+#include <config/iridium-config.h>
 #endif
 
 #include <compat.h>
@@ -51,8 +51,9 @@ bool Lookup(const char *pszName, CService& addr, int portDefault, bool fAllowLoo
 bool Lookup(const char *pszName, std::vector<CService>& vAddr, int portDefault, bool fAllowLookup, unsigned int nMaxSolutions);
 CService LookupNumeric(const char *pszName, int portDefault = 0);
 bool LookupSubNet(const char *pszName, CSubNet& subnet);
-bool ConnectSocketDirectly(const CService &addrConnect, SOCKET& hSocketRet, int nTimeout);
-bool ConnectThroughProxy(const proxyType &proxy, const std::string& strDest, int port, SOCKET& hSocketRet, int nTimeout, bool *outProxyConnectionFailed);
+SOCKET CreateSocket(const CService &addrConnect);
+bool ConnectSocketDirectly(const CService &addrConnect, const SOCKET& hSocketRet, int nTimeout);
+bool ConnectThroughProxy(const proxyType &proxy, const std::string& strDest, int port, const SOCKET& hSocketRet, int nTimeout, bool *outProxyConnectionFailed);
 /** Return readable error string for a network error code */
 std::string NetworkErrorString(int err);
 /** Close socket and set hSocket to INVALID_SOCKET */
@@ -67,4 +68,4 @@ bool SetSocketNoDelay(const SOCKET& hSocket);
 struct timeval MillisToTimeval(int64_t nTimeout);
 void InterruptSocks5(bool interrupt);
 
-#endif // BITCOIN_NETBASE_H
+#endif // IRIDIUM_NETBASE_H

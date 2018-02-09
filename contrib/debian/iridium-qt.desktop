@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Name=Iridium Core
+Comment=Connect to the Iridium P2P Network
+Comment[de]=Verbinde mit dem Iridium peer-to-peer Netzwerk
+Comment[fr]=Iridium, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Iridium, eşten eşe kriptografik sanal para birimi
+Exec=iridium-qt %u
+Terminal=false
+Type=Application
+Icon=iridium128
+MimeType=x-scheme-handler/iridium;
+Categories=Office;Finance;
+StartupWMClass=Iridium-qt

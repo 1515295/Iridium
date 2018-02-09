@@ -1,0 +1,25 @@
+# It is not recommended to modify this file in-place, because it will
+# be overwritten during package upgrades. If you want to add further
+# options or overwrite existing ones then use
+# $ systemctl edit iridiumd.service
+# See "man systemd.service" for details.
+
+# Note that almost all daemon options could be specified in
+# /etc/iridium/iridium.conf
+
+[Unit]
+Description=Iridium daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/iridiumd -daemon -conf=/etc/iridium/iridium.conf -pid=/run/iridiumd/iridiumd.pid
+# Creates /run/iridiumd owned by iridium
+RuntimeDirectory=iridiumd
+User=iridium
+Type=forking
+PIDFile=/run/iridiumd/iridiumd.pid
+Restart=on-failure
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

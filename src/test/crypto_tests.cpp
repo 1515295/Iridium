@@ -1,4 +1,4 @@
-// Copyright (c) 2014-2016 The Bitcoin Core developers
+// Copyright (c) 2014-2017 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -12,7 +12,7 @@
 #include <crypto/hmac_sha512.h>
 #include <random.h>
 #include <utilstrencodings.h>
-#include <test/test_bitcoin.h>
+#include <test/test_iridium.h>
 
 #include <vector>
 
@@ -261,7 +261,7 @@ BOOST_AUTO_TEST_CASE(sha256_testvectors) {
                "f08a78cbbaee082b052ae0708f32fa1e50c5c421aa772ba5dbb406a2ea6be342");
     TestSHA256("This is exactly 64 bytes long, not counting the terminating byte",
                "ab64eff7e88e2e46165e29f2bce41826bd4c7b3552f6b382a9e7d3af47c245f8");
-    TestSHA256("As Bitcoin relies on 80 byte header hashes, we want to have an example for that.",
+    TestSHA256("As Iridium relies on 80 byte header hashes, we want to have an example for that.",
                "7406e8de7d6e4fffc573daef05aefb8806e7790f55eab5576f31349743cca743");
     TestSHA256(std::string(1000000, 'a'),
                "cdc76e5c9914fb9281a1c7e284d73e67f1809a48a497200e046d39ccc7112cd0");
@@ -340,6 +340,22 @@ BOOST_AUTO_TEST_CASE(hmac_sha256_testvectors) {
                    "647320746f20626520686173686564206265666f7265206265696e6720757365"
                    "642062792074686520484d414320616c676f726974686d2e",
                    "9b09ffa71b942fcb27635fbcd5b0e944bfdc63644f0713938a7f51535c3a35e2");
+    // Test case with key length 63 bytes.
+    TestHMACSHA256("4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a6566",
+                   "7768617420646f2079612077616e7420666f72206e6f7468696e673f",
+                   "9de4b546756c83516720a4ad7fe7bdbeac4298c6fdd82b15f895a6d10b0769a6");
+    // Test case with key length 64 bytes.
+    TestHMACSHA256("4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665",
+                   "7768617420646f2079612077616e7420666f72206e6f7468696e673f",
+                   "528c609a4c9254c274585334946b7c2661bad8f1fc406b20f6892478d19163dd");
+    // Test case with key length 65 bytes.
+    TestHMACSHA256("4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a",
+                   "7768617420646f2079612077616e7420666f72206e6f7468696e673f",
+                   "d06af337f359a2330deffb8e3cbe4b5b7aa8ca1f208528cdbd245d5dc63c4483");
 }
 
 BOOST_AUTO_TEST_CASE(hmac_sha512_testvectors) {
@@ -383,6 +399,31 @@ BOOST_AUTO_TEST_CASE(hmac_sha512_testvectors) {
                    "642062792074686520484d414320616c676f726974686d2e",
                    "e37b6a775dc87dbaa4dfa9f96e5e3ffddebd71f8867289865df5a32d20cdc944"
                    "b6022cac3c4982b10d5eeb55c3e4de15134676fb6de0446065c97440fa8c6a58");
+    // Test case with key length 127 bytes.
+    TestHMACSHA512("4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a6566",
+                   "7768617420646f2079612077616e7420666f72206e6f7468696e673f",
+                   "267424dfb8eeb999f3e5ec39a4fe9fd14c923e6187e0897063e5c9e02b2e624a"
+                   "c04413e762977df71a9fb5d562b37f89dfdfb930fce2ed1fa783bbc2a203d80e");
+    // Test case with key length 128 bytes.
+    TestHMACSHA512("4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665",
+                   "7768617420646f2079612077616e7420666f72206e6f7468696e673f",
+                   "43aaac07bb1dd97c82c04df921f83b16a68d76815cd1a30d3455ad43a3d80484"
+                   "2bb35462be42cc2e4b5902de4d204c1c66d93b47d1383e3e13a3788687d61258");
+    // Test case with key length 129 bytes.
+    TestHMACSHA512("4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a6566654a6566654a6566654a6566654a6566654a6566654a6566654a656665"
+                   "4a",
+                   "7768617420646f2079612077616e7420666f72206e6f7468696e673f",
+                   "0b273325191cfc1b4b71d5075c8fcad67696309d292b1dad2cd23983a35feb8e"
+                   "fb29795e79f2ef27f68cb1e16d76178c307a67beaad9456fac5fdffeadb16e2c");
 }
 
 BOOST_AUTO_TEST_CASE(aes_testvectors) {

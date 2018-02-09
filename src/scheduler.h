@@ -1,9 +1,9 @@
-// Copyright (c) 2015 The Bitcoin Core developers
+// Copyright (c) 2015-2017 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_SCHEDULER_H
-#define BITCOIN_SCHEDULER_H
+#ifndef IRIDIUM_SCHEDULER_H
+#define IRIDIUM_SCHEDULER_H
 
 //
 // NOTE:
@@ -108,6 +108,8 @@ public:
     // Processes all remaining queue members on the calling thread, blocking until queue is empty
     // Must be called after the CScheduler has no remaining processing threads!
     void EmptyQueue();
+
+    size_t CallbacksPending();
 };
 
 #endif

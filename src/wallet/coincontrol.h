@@ -1,9 +1,9 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2017 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_WALLET_COINCONTROL_H
-#define BITCOIN_WALLET_COINCONTROL_H
+#ifndef IRIDIUM_WALLET_COINCONTROL_H
+#define IRIDIUM_WALLET_COINCONTROL_H
 
 #include <policy/feerate.h>
 #include <policy/fees.h>
@@ -16,7 +16,10 @@
 class CCoinControl
 {
 public:
+    //! Custom change destination, if not set an address is generated
     CTxDestination destChange;
+    //! Custom change type, ignored if destChange is set, defaults to g_change_type
+    OutputType change_type;
     //! If false, allows unselected inputs, but requires all selected inputs be used
     bool fAllowOtherInputs;
     //! Includes watch only addresses which match the ISMINE_WATCH_SOLVABLE criteria
@@ -40,6 +43,7 @@ public:
     void SetNull()
     {
         destChange = CNoDestination();
+        change_type = g_change_type;
         fAllowOtherInputs = false;
         fAllowWatchOnly = false;
         setSelected.clear();
@@ -84,4 +88,4 @@ private:
     std::set<COutPoint> setSelected;
 };
 
-#endif // BITCOIN_WALLET_COINCONTROL_H
+#endif // IRIDIUM_WALLET_COINCONTROL_H

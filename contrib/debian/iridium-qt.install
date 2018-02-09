@@ -1,0 +1,6 @@
+usr/local/bin/iridium-qt usr/bin
+share/pixmaps/iridium32.xpm usr/share/pixmaps
+share/pixmaps/iridium16.xpm usr/share/pixmaps
+share/pixmaps/iridium128.png usr/share/pixmaps
+debian/iridium-qt.desktop usr/share/applications
+debian/iridium-qt.protocol usr/share/kde4/services/

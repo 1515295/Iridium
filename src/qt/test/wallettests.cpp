@@ -1,6 +1,6 @@
 #include <qt/test/wallettests.h>
 
-#include <qt/bitcoinamountfield.h>
+#include <qt/iridiumamountfield.h>
 #include <qt/callback.h>
 #include <qt/optionsmodel.h>
 #include <qt/platformstyle.h>
@@ -10,7 +10,7 @@
 #include <qt/transactiontablemodel.h>
 #include <qt/transactionview.h>
 #include <qt/walletmodel.h>
-#include <test/test_bitcoin.h>
+#include <test/test_iridium.h>
 #include <validation.h>
 #include <wallet/wallet.h>
 #include <qt/overviewpage.h>
@@ -69,7 +69,7 @@ uint256 SendCoins(CWallet& wallet, SendCoinsDialog& sendCoinsDialog, const CTxDe
     QVBoxLayout* entries = sendCoinsDialog.findChild<QVBoxLayout*>("entries");
     SendCoinsEntry* entry = qobject_cast<SendCoinsEntry*>(entries->itemAt(0)->widget());
     entry->findChild<QValidatedLineEdit*>("payTo")->setText(QString::fromStdString(EncodeDestination(address)));
-    entry->findChild<BitcoinAmountField*>("payAmount")->setValue(amount);
+    entry->findChild<IridiumAmountField*>("payAmount")->setValue(amount);
     sendCoinsDialog.findChild<QFrame*>("frameFee")
         ->findChild<QFrame*>("frameFeeSelection")
         ->findChild<QCheckBox*>("optInRBF")
@@ -144,11 +144,14 @@ void BumpFee(TransactionView& view, const uint256& txid, bool expectDisabled, st
 //
 // This also requires overriding the default minimal Qt platform:
 //
-//     src/qt/test/test_bitcoin-qt -platform xcb      # Linux
-//     src/qt/test/test_bitcoin-qt -platform windows  # Windows
-//     src/qt/test/test_bitcoin-qt -platform cocoa    # macOS
+//     src/qt/test/test_iridium-qt -platform xcb      # Linux
+//     src/qt/test/test_iridium-qt -platform windows  # Windows
+//     src/qt/test/test_iridium-qt -platform cocoa    # macOS
 void TestGUI()
 {
+    g_address_type = OUTPUT_TYPE_P2SH_SEGWIT;
+    g_change_type = OUTPUT_TYPE_P2SH_SEGWIT;
+
     // Set up wallet and chain with 105 blocks (5 mature blocks for spending).
     TestChain100Setup test;
     for (int i = 0; i < 5; ++i) {
@@ -161,12 +164,14 @@ void TestGUI()
     wallet.LoadWallet(firstRun);
     {
         LOCK(wallet.cs_wallet);
-        wallet.SetAddressBook(test.coinbaseKey.GetPubKey().GetID(), "", "receive");
+        wallet.SetAddressBook(GetDestinationForKey(test.coinbaseKey.GetPubKey(), g_address_type), "", "receive");
         wallet.AddKeyPubKey(test.coinbaseKey, test.coinbaseKey.GetPubKey());
     }
     {
         LOCK(cs_main);
-        wallet.ScanForWalletTransactions(chainActive.Genesis(), nullptr, true);
+        WalletRescanReserver reserver(&wallet);
+        reserver.reserve();
+        wallet.ScanForWalletTransactions(chainActive.Genesis(), nullptr, reserver, true);
     }
     wallet.SetBroadcastTransactions(true);
 
@@ -201,7 +206,7 @@ void TestGUI()
     QString balanceText = balanceLabel->text();
     int unit = walletModel.getOptionsModel()->getDisplayUnit();
     CAmount balance = walletModel.getBalance();
-    QString balanceComparison = BitcoinUnits::formatWithUnit(unit, balance, false, BitcoinUnits::separatorAlways);
+    QString balanceComparison = IridiumUnits::formatWithUnit(unit, balance, false, IridiumUnits::separatorAlways);
     QCOMPARE(balanceText, balanceComparison);
 
     // Check Request Payment button
@@ -214,7 +219,7 @@ void TestGUI()
     labelInput->setText("TEST_LABEL_1");
 
     // Amount input
-    BitcoinAmountField* amountInput = receiveCoinsDialog.findChild<BitcoinAmountField*>("reqAmount");
+    IridiumAmountField* amountInput = receiveCoinsDialog.findChild<IridiumAmountField*>("reqAmount");
     amountInput->setValue(1);
 
     // Message input
@@ -230,7 +235,7 @@ void TestGUI()
             QString paymentText = rlist->toPlainText();
             QStringList paymentTextList = paymentText.split('\n');
             QCOMPARE(paymentTextList.at(0), QString("Payment information"));
-            QVERIFY(paymentTextList.at(1).indexOf(QString("URI: bitcoin:")) != -1);
+            QVERIFY(paymentTextList.at(1).indexOf(QString("URI: iridium:")) != -1);
             QVERIFY(paymentTextList.at(2).indexOf(QString("Address:")) != -1);
             QCOMPARE(paymentTextList.at(3), QString("Amount: 0.00000001 ") + QString::fromStdString(CURRENCY_UNIT));
             QCOMPARE(paymentTextList.at(4), QString("Label: TEST_LABEL_1"));

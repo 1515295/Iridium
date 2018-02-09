@@ -1,9 +1,9 @@
-// Copyright (c) 2011-2016 The Bitcoin Core developers
+// Copyright (c) 2011-2017 The Bitcoin Core developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_QT_WALLETMODEL_H
-#define BITCOIN_QT_WALLETMODEL_H
+#ifndef IRIDIUM_QT_WALLETMODEL_H
+#define IRIDIUM_QT_WALLETMODEL_H
 
 #include <qt/paymentrequestplus.h>
 #include <qt/walletmodeltransaction.h>
@@ -14,6 +14,8 @@
 #include <vector>
 
 #include <QObject>
+
+enum OutputType : int;
 
 class AddressTableModel;
 class OptionsModel;
@@ -94,7 +96,7 @@ public:
     }
 };
 
-/** Interface to Bitcoin wallet from Qt view code. */
+/** Interface to Iridium wallet from Qt view code. */
 class WalletModel : public QObject
 {
     Q_OBJECT
@@ -214,9 +216,9 @@ public:
 
     bool hdEnabled() const;
 
-    int getDefaultConfirmTarget() const;
+    OutputType getDefaultAddressType() const;
 
-    bool getDefaultWalletRbf() const;
+    int getDefaultConfirmTarget() const;
 
 private:
     CWallet *wallet;
@@ -285,4 +287,4 @@ public Q_SLOTS:
     void pollBalanceChanged();
 };
 
-#endif // BITCOIN_QT_WALLETMODEL_H
+#endif // IRIDIUM_QT_WALLETMODEL_H

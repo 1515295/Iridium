@@ -1,0 +1,81 @@
+policy_module(iridium, 1.100.1)
+
+########################################
+#
+# Declarations
+#
+
+type iridium_t;
+type iridium_exec_t;
+init_daemon_domain(iridium_t, iridium_exec_t)
+
+permissive iridium_t;
+
+type iridium_initrc_exec_t;
+init_script_file(iridium_initrc_exec_t)
+
+type iridium_conf_t;
+files_type(iridium_conf_t)
+
+type iridium_var_lib_t;
+files_type(iridium_var_lib_t)
+
+type iridium_var_run_t;
+files_type(iridium_var_run_t)
+
+type iridium_port_t;
+corenet_port(iridium_port_t)
+
+########################################
+#
+# iridium local policy
+#
+allow iridium_t self:process { fork };
+
+allow iridium_t self:fifo_file rw_fifo_file_perms;
+allow iridium_t self:unix_stream_socket create_stream_socket_perms;
+
+manage_dirs_pattern(iridium_t, iridium_conf_t, iridium_conf_t)
+manage_files_pattern(iridium_t, iridium_conf_t, iridium_conf_t)
+
+manage_dirs_pattern(iridium_t, iridium_var_lib_t, iridium_var_lib_t)
+manage_files_pattern(iridium_t, iridium_var_lib_t, iridium_var_lib_t)
+files_var_lib_filetrans(iridium_t, iridium_var_lib_t, { dir file })
+
+manage_dirs_pattern(iridium_t, iridium_var_run_t, iridium_var_run_t)
+manage_files_pattern(iridium_t, iridium_var_run_t, iridium_var_run_t)
+
+sysnet_dns_name_resolve(iridium_t)
+corenet_all_recvfrom_unlabeled(iridium_t)
+
+allow iridium_t self:tcp_socket create_stream_socket_perms;
+corenet_tcp_sendrecv_generic_if(iridium_t)
+corenet_tcp_sendrecv_generic_node(iridium_t)
+corenet_tcp_sendrecv_all_ports(iridium_t)
+corenet_tcp_bind_generic_node(iridium_t)
+
+gen_require(`
+    type iridium_port_t;
+')
+allow iridium_t iridium_port_t:tcp_socket name_bind;
+
+gen_require(`
+    type iridium_port_t;
+')
+allow iridium_t iridium_port_t:tcp_socket name_connect;
+
+domain_use_interactive_fds(iridium_t)
+
+files_read_etc_files(iridium_t)
+
+miscfiles_read_localization(iridium_t)
+
+sysnet_dns_name_resolve(iridium_t)
+
+allow iridium_t iridium_exec_t:file execute_no_trans;
+allow iridium_t self:process setsched;
+corecmd_exec_ls(iridium_t)
+corenet_tcp_connect_http_port(iridium_t)
+dev_read_urand(iridium_t)
+fs_getattr_xattr_fs(iridium_t)
+kernel_read_system_state(iridium_t)
